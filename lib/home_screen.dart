@@ -75,6 +75,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           width: double.maxFinite,
           child: Row(
             children: [
+              Image(
+                  image: NetworkImage(
+                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${pokemon.url!.split('/')[6]}.png')),
               Expanded(child: Text('${pokemon.name}')),
             ],
           ),
