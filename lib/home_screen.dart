@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_fetch_example/details_screen.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_fetch_example/pokemon.dart';
+import 'package:flutter_fetch_example/models/pokemon.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({super.key});
@@ -67,19 +68,29 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       itemCount: pokemons.length,
       itemBuilder: (context, index) {
         final pokemon = pokemons[index];
-        return Container(
-          color: Colors.grey.shade300,
-          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          height: 100,
-          width: double.maxFinite,
-          child: Row(
-            children: [
-              Image(
-                  image: NetworkImage(
-                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${pokemon.url!.split('/')[6]}.png')),
-              Expanded(child: Text('${pokemon.name}')),
-            ],
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => DetailsScreen(pokemon),
+              ),
+            );
+          },
+          child: Container(
+            color: Colors.grey.shade300,
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            height: 100,
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Image(
+                    image: NetworkImage(
+                        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${pokemon.url!.split('/')[6]}.png')),
+                Expanded(child: Text('${pokemon.name}')),
+              ],
+            ),
           ),
         );
       },
