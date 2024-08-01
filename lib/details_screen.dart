@@ -63,61 +63,67 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image(
-                image: NetworkImage(
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${widget.pokemon.url!.split('/')[6]}.png')),
-            const SizedBox(
-              width: 20,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Abilities:',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
-                Wrap(
-                  spacing: 8.0,
-                  direction: Axis.horizontal,
-                  children: details.abilities.map((ability) {
-                    return Chip(
-                      padding: const EdgeInsets.all(2.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      label: Text(ability.ability.name),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Types:',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
-                Wrap(
-                  spacing: 8.0,
-                  direction: Axis.horizontal,
-                  children: details.types.map((type) {
-                    return Chip(
-                      padding: const EdgeInsets.all(2.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      label: Text(type.type.name),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image(
+                  image: NetworkImage(
+                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${widget.pokemon.url!.split('/')[6]}.png')),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Abilities:',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: 250,
+                    child: Wrap(
+                      spacing: 8.0,
+                      direction: Axis.horizontal,
+                      children: details.abilities.map((ability) {
+                        return Chip(
+                          padding: const EdgeInsets.all(2.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          label: Text(ability.ability.name),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    'Types:',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  Wrap(
+                    spacing: 8.0,
+                    direction: Axis.horizontal,
+                    children: details.types.map((type) {
+                      return Chip(
+                        padding: const EdgeInsets.all(2.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        label: Text(type.type.name),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(22.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
