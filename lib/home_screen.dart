@@ -16,18 +16,22 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   int _offset = 0;
   bool _isLoading = false;
   List<Pokemon> _pokemons = [];
+  List<Pokemon> _filteredPokemons = [];
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _fetchPokemons();
     _scrollController.addListener(_scrollListener);
+    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -48,6 +52,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       setState(() {
         _offset += _limit;
         _pokemons.addAll(newPokemons);
+        _filteredPokemons = _pokemons;
       });
     } catch (e) {
       // Handle error
@@ -74,13 +79,41 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     }
   }
 
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredPokemons = _pokemons
+          .where((pokemon) => pokemon.name.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _isLoading && _pokemons.isEmpty
-            ? const CircularProgressIndicator()
-            : buildPokemonList(),
+      appBar: AppBar(
+        title: const Text('Pokémon List'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search Pokémon',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: _isLoading && _pokemons.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : buildPokemonList(),
+          ),
+        ],
       ),
     );
   }
@@ -88,12 +121,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget buildPokemonList() {
     return ListView.builder(
       controller: _scrollController,
-      itemCount: _pokemons.length + (_isLoading ? 1 : 0),
+      itemCount: _filteredPokemons.length + (_isLoading ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index == _pokemons.length) {
+        if (index == _filteredPokemons.length) {
           return const Center(child: CircularProgressIndicator());
         }
-        final pokemon = _pokemons[index];
+        final pokemon = _filteredPokemons[index];
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -113,7 +146,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               children: [
                 Image(
                   image: NetworkImage(
-                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${pokemon.url!.split('/')[6]}.png'),
+                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${pokemon.url.split('/')[6]}.png'),
                 ),
                 Expanded(child: Text('${pokemon.name}')),
               ],
